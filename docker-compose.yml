@@ -1,0 +1,29 @@
+# Finance View w Dockerze: frontend + API w jednym kontenerze, dane (SQLite) w wolumenie „finanse-data”.
+#
+#   1. Utwórz plik .env obok tego pliku z kluczem do podpisywania logowań:
+#        SECRET_KEY=<wynik: python3 -c "import secrets; print(secrets.token_urlsafe(48))">
+#   2. docker compose up -d --build
+#   3. Otwórz http://localhost:8000 (albo http://<adres-komputera>:8000 na telefonie w tej samej sieci)
+#
+# Kopia bazy:  docker compose cp finanse:/data/finanse.db ./finanse-kopia.db
+# Aktualizacja: docker compose up -d --build   (tabele i kolumny uzupełniają się same, dane zostają)
+
+name: finanse
+
+services:
+  finanse:
+    build: .
+    image: finanse:latest
+    restart: unless-stopped
+    ports:
+      - "${PORT:-8000}:8000"
+    environment:
+      SECRET_KEY: ${SECRET_KEY:?Ustaw SECRET_KEY w pliku .env obok docker-compose.yml}
+      DATABASE_URL: ${DATABASE_URL:-sqlite:////data/finanse.db}
+      ACCESS_TOKEN_EXPIRE_MINUTES: ${ACCESS_TOKEN_EXPIRE_MINUTES:-10080}
+      TZ: ${TZ:-Europe/Warsaw}
+    volumes:
+      - finanse-data:/data
+
+volumes:
+  finanse-data:

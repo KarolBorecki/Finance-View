@@ -1,0 +1,22 @@
+# tylko to, czego potrzebuje Dockerfile — reszta spowalnia budowanie albo nie powinna trafić do obrazu
+.git
+**/.DS_Store
+**/__pycache__
+**/*.pyc
+.pytest_cache
+**/.ruff_cache
+
+backend/.venv
+backend/.env
+backend/*.db
+backend/*.db-*
+backend/tests
+
+frontend/node_modules
+frontend/dist
+frontend/dist-iphone
+frontend/dist-ios
+frontend/ios
+
+samples
+deploy
